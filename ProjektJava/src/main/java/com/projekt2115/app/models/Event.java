@@ -26,6 +26,7 @@ public class Event {
     @NotBlank(message = "Lokalizacja jest wymagana")
     private String Location;
 
+    @NotNull(message = "Cena bielu jest wymagana")
     @Min(value = 0, message="Cena biletu nie może być ujemna")
     private double ticketPrice;
 

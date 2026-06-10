@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html  lang='pl' xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista eventów</title>
+</head>
+<body>
+  <h1>Eventy</h1>
+  <h3>Dodaj event</h3>
+  <form th:action="@{events/add}" th:object="${newEvent}" method="post">
+    <p>
+      <label>Nazwa eventu :</label>
+      <input type="text" th:field="*{name}" required>
+    </p>
+    <p>
+      <label>Lokalizacja: </label>
+      <input type="text" th:field="*{location}" required />
+    </p>
+    <p>
+      <label>Cena biletu : </label>
+      <input type="number" step="0.01" th:field="*{ticketPrice}" required />
+    </p>
+    <p>
+      <label>Data koncertu: </label>
+      <input type="date" th:field="*{eventDate}" required />
+    </p>
+    <p>
+      <button type="submit">Zapisz event w bazie</button>
+    </p>
+  </form>
+  <table border="1" cellpadding="5">
+    <thead>
+    <tr>
+      <th>Nazwa eventu</th>
+      <th>Lokalizacja</th>
+      <th>Cena biletu</th>
+      <th>Data</th>
+      <th>Edytuj</th>
+      <th>Usuń</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="event : ${events}">
+      <td th:text="${event.name}">Nazwa</td>
+      <td th:text="${event.location}">Lokalizacja</td>
+      <td th:text="${event.ticketPrice}">0.00</td>
+      <td th:text="${#dates.format(event.eventDate, 'dd-MM-yyyy')}">01-01-2026</td>
+      <td>
+        <a th:href="@{/events/edit/{id}(id=${event.id})}">
+          <button type="button">Edytuj</button>
+        </a>
+      </td>
+      <td>
+        <a th:href="@{/events/delete/{id}(id=${event.id})}"
+           onclick="return confirm('Czy na pewno chcesz usunąć ten koncert?')">
+          <button type="button">Usuń</button>
+        </a>
+      </td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(events)}">
+      <td colspan="5" style="text-align: center; color: gray;">
+        Brak eventów w bazie danych Oracle.
+      </td>
+    </tr>
+    </tbody> 
+  </table>
+</body>
+</html>

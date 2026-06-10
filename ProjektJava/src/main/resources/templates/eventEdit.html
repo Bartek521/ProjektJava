@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edytuj event</title>
+</head>
+<body>
+    <h1>Edytuj event</h1>
+    <form th:action="@{events/update}" th:object="${eventToEdit}" method="post">
+        <input type="hidden" th:field="*{id}" />
+        <p>
+            <label>Nazwa koncertu: </label>
+            <input type="text" th:field="*{name}" required />
+        </p>
+        <p>
+            <label>Lokalizacja: </label>
+            <input type="text" th:field="*{location}" required />
+        </p>
+        <p>
+            <label>Cena biletu (PLN): </label>
+            <input type="number" step="0.01" th:field="*{ticketPrice}" required />
+        </p>
+        <p>
+            <label>Data koncertu: </label>
+            <input type="date" th:field="*{eventDate}" required />
+        </p>
+        <p>
+            <button type="submit">Zapisz zmiany</button>
+            <a th:href="@{/events}"><button type="button">Anuluj</button></a>
+        </p>
+    </form>>
+
+</body>
+</html>
