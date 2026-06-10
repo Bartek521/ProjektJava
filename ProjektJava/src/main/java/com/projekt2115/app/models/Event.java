@@ -1,4 +1,4 @@
-package models;
+package com.projekt2115.app.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
