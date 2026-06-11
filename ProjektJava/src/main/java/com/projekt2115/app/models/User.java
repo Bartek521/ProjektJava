@@ -28,7 +28,7 @@ public class User {
     @NotBlank(message = "email jest wymagany")
     @Email(message = "Podaj poprawny adres email(np.nazw@domena.pl)")
     @Column(unique = true)
-    private String emial;
+    private String email;
     @NotBlank(message = "Hasło jest wymagane")
     private String password;
     @NotNull(message = "Role użytkownik jest wymagany")
@@ -37,5 +37,5 @@ public class User {
 
 
     private String nickname;
-    private String bandname;
+    private String bandName;
 }

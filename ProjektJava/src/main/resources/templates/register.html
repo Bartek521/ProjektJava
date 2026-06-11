@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rejstracja</title>
+</head>
+<body>
+    <h2>Załóż konto</h2>
+    <p th:if="${error}" th:text="${error}" style="color: red;"></p>
+    <form th:action="@{/users/register}" th:object="${user}" method="post">
+
+        <label>Imię:</label><br>
+        <input type="text" th:field="*{firstName}" required /><br><br>
+        <label>Nazwisko:</label><br>
+        <input type="text" th:field="*{lastName}" required /><br><br>
+        <label>Email:</label><br>
+        <input type="email" th:field="*{email}" required /><br><br>
+        <label>Hasło:</label><br>
+        <input type="password" th:field="*{password}" required /><br><br>
+        <label>Rola:</label><br>
+        <select th:field="*{role}" id="roleSelect" onchange="toggleStageName()">
+            <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"></option>
+        </select>
+        <br>
+        <br>
+        <p id="bandname" style="display: none; margin: 0;">
+            <label>Ksywka Artystyczna:</label><br>
+            <input type="text" th:field="*{nickname}" /><br><br>
+        </p>
+
+        <button type="submit">Zarejestruj się</button>
+    </form>
+
+    <script>
+        function toggleStageName() {
+            var roleSelect = document.getElementById("roleSelect");
+            var bandname = document.getElementById("bandname");
+            if (roleSelect.value === "ARTIST") {
+                bandname.style.display = "block";
+            } else {
+                bandname.style.display = "none";
+            }
+        }
+        window.onload = toggleStageName;
+    </script>
+
+
+</body>
+</html>

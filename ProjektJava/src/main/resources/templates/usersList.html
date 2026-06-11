@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista użytkowników</title>
+</head>
+<body>
+<h2>Zarejestrowani użytkownicy</h2>
+
+<table border="1" cellpadding="10">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Imię</th>
+        <th>Nazwisko</th>
+        <th>Email</th>
+        <th>Rola</th>
+        <th>Nazwa zespołu</th>
+        <th>Usuń</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="u : ${usersList}">
+        <th th:text="${u.id}">1</th>
+        <td th:text="${u.firstName}">Imię</td>
+        <td th:text="${u.lastName}">Nazwisko</td>
+        <td th:text="${u.email}">Email</td>
+        <td th:text="${u.role}">Rola</td>
+        <td th:text="${u.bandName}">Brak</td>
+        <td><a th:href="@{/users/delete/{id}(id=${u.id})}"
+               onclick="return confirm('Czy na pewno chcesz usunąć tego użytkownika?')">
+            <button type="button">Usuń</button>
+        </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<br>
+<a href="/users/register">Dodaj nowego użytkownika</a>
+
+</body>
+</html>

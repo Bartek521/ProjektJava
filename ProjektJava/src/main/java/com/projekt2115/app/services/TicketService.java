@@ -32,10 +32,10 @@ public class TicketService {
         return ticketRepository.findById(id);
     }
     public List<Ticket> getTicketsByUser(Long userid){
-        return ticketRepository.findByUserID(userid);
+        return ticketRepository.findByUserId(userid);
     }
     public List<Ticket> getTicketsByEvent(Long eventid){
-        return ticketRepository.findByEventID(eventid);
+        return ticketRepository.findByEventId(eventid);
     }
     public Ticket saveTicket(Ticket ticket){
         if (ticket.getEvent()==null || ticket.getEvent().getId()==null ||!eventRepository.existsById(ticket.getEvent().getId())) {

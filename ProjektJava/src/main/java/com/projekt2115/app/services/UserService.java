@@ -25,7 +25,7 @@ public class UserService {
     }
     public User saveUser (User user) {
         if (user.getId() == null) {
-            Optional<User> existingUser = userRepository.findByEmial(user.getEmial());
+            Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
             if (existingUser.isPresent()){
                 throw new IllegalArgumentException("Email jest już zajęty");
             }
