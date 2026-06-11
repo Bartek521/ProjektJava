@@ -7,22 +7,26 @@
 <body>
   <h1>Eventy</h1>
   <h3>Dodaj event</h3>
-  <form th:action="@{events/add}" th:object="${newEvent}" method="post">
+  <form th:action="@{/events/add}" th:object="${newEvent}" method="post">
     <p>
       <label>Nazwa eventu :</label>
       <input type="text" th:field="*{name}" required>
+      <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red;"></span>
     </p>
     <p>
       <label>Lokalizacja: </label>
       <input type="text" th:field="*{location}" required />
+      <span th:if="${#fields.hasErrors('location')}" th:errors="*{location}" style="color: red;"></span>
     </p>
     <p>
       <label>Cena biletu : </label>
       <input type="number" step="0.01" th:field="*{ticketPrice}" required />
+      <span th:if="${#fields.hasErrors('ticketPrice')}" th:errors="*{ticketPrice}" style="color: red;"></span>
     </p>
     <p>
       <label>Data koncertu: </label>
       <input type="date" th:field="*{eventDate}" required />
+      <span th:if="${#fields.hasErrors('eventDate')}" th:errors="*{eventDate}" style="color: red;"></span>
     </p>
     <p>
       <button type="submit">Zapisz event w bazie</button>

@@ -32,8 +32,12 @@ public class EventController {
     @PostMapping("/events/add")
     public String addEvent(@Valid @ModelAttribute("newEvent") Event event, BindingResult result, Model model){
         if (result.hasErrors()){
+            System.out.println("Błąd walidacyjny:");
+            result.getAllErrors().forEach(error ->{
+                System.out.println(error.getDefaultMessage());
+            });
             model.addAttribute("events", eventService.getAllEvents());
-            return "eventList";
+            return "EventList";
         }
         eventService.saveEvent(event);
         return "redirect:/events";

@@ -24,11 +24,11 @@ public class Event {
     private String name;
 
     @NotBlank(message = "Lokalizacja jest wymagana")
-    private String Location;
+    private String location;
 
     @NotNull(message = "Cena bielu jest wymagana")
     @Min(value = 0, message="Cena biletu nie może być ujemna")
-    private double ticketPrice;
+    private Double ticketPrice;
 
     @NotNull(message = "Data koncertu musi być podana")
     @Future(message = "Nie można dodać koncertu z przeszłości")

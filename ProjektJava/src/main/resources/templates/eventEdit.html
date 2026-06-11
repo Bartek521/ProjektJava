@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Edytuj event</h1>
-    <form th:action="@{events/update}" th:object="${eventToEdit}" method="post">
+    <form th:action="@{/events/update}" th:object="${eventToEdit}" method="post">
         <input type="hidden" th:field="*{id}" />
         <p>
             <label>Nazwa koncertu: </label>
