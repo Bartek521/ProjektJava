@@ -1,7 +1,7 @@
 package com.projekt2115.app.services;
 
-import com.projekt2115.app.models.Role;
 import com.projekt2115.app.models.User;
+import com.projekt2115.app.models.UserStatus;
 import com.projekt2115.app.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +23,7 @@ public class UserService {
     public Optional<User> getUserById(Long id){
         return userRepository.findById(id);
     }
+
     public User saveUser (User user) {
         if (user.getId() == null) {
             Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
@@ -30,16 +31,14 @@ public class UserService {
                 throw new IllegalArgumentException("Email jest już zajęty");
             }
         }
-        if(user.getRole() == Role.ARTIST) {
-
-            if (user.getNickname() == null || user.getNickname().isBlank()) {
-                throw new IllegalArgumentException("Artysta musi podaj swoją ksywkę");
-            }
+        if (user.getStatusUser() == null) {
+            user.setStatusUser(UserStatus.BAMBIK);
         }
+
         return userRepository.save(user);
     }
 
-    public void deletUser(Long id){
+    public void deleteUser(Long id){
         userRepository.deleteById(id);
     }
 

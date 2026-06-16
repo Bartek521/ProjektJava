@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Lista użytkowników</title>
@@ -11,26 +11,33 @@
     <thead>
     <tr>
         <th>ID</th>
+        <th>Nazwa użytkownika (Ksywka)</th>
         <th>Imię</th>
         <th>Nazwisko</th>
         <th>Email</th>
-        <th>Rola</th>
-        <th>Nazwa zespołu</th>
+        <th>Data Urodzenia</th>
+        <th>Status</th>
+        <th>Punkty</th>
+        <th>Data rejestracji</th>
         <th>Usuń</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="u : ${usersList}">
-        <th th:text="${u.id}">1</th>
+        <td th:text="${u.id}">1</td>
+        <td th:text="${u.nickname}" style="font-weight: bold;">Ksywka</td>
         <td th:text="${u.firstName}">Imię</td>
         <td th:text="${u.lastName}">Nazwisko</td>
         <td th:text="${u.email}">Email</td>
-        <td th:text="${u.role}">Rola</td>
-        <td th:text="${u.bandName}">Brak</td>
-        <td><a th:href="@{/users/delete/{id}(id=${u.id})}"
+        <td th:text="${u.birthDate}">Data urodzenia</td>
+        <td th:text="${u.statusUser}">Status</td>
+        <td th:text="${u.points}">PRPoints</td>
+        <td th:text="${u.enterDate}">Data dołączenia</td>
+        <td>
+            <a th:href="@{/users/delete/{id}(id=${u.id})}"
                onclick="return confirm('Czy na pewno chcesz usunąć tego użytkownika?')">
-            <button type="button">Usuń</button>
-        </a>
+                <button type="button">Usuń</button>
+            </a>
         </td>
     </tr>
     </tbody>

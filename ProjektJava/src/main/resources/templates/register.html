@@ -1,49 +1,67 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Rejstracja</title>
+    <title>Rejestracja</title>
 </head>
 <body>
-    <h2>Załóż konto</h2>
-    <p th:if="${error}" th:text="${error}" style="color: red;"></p>
-    <form th:action="@{/users/register}" th:object="${user}" method="post">
+<h2>Załóż konto</h2>
+<p th:if="${error}" th:text="${error}" style="color: red;"></p>
 
-        <label>Imię:</label><br>
-        <input type="text" th:field="*{firstName}" required /><br><br>
-        <label>Nazwisko:</label><br>
-        <input type="text" th:field="*{lastName}" required /><br><br>
-        <label>Email:</label><br>
-        <input type="email" th:field="*{email}" required /><br><br>
-        <label>Hasło:</label><br>
-        <input type="password" th:field="*{password}" required /><br><br>
-        <label>Rola:</label><br>
-        <select th:field="*{role}" id="roleSelect" onchange="toggleStageName()">
-            <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"></option>
-        </select>
-        <br>
-        <br>
-        <p id="bandname" style="display: none; margin: 0;">
-            <label>Ksywka Artystyczna:</label><br>
-            <input type="text" th:field="*{nickname}" /><br><br>
+<form th:action="@{/users/register}" th:object="${user}" method="post">
+
+    <label>Nazwa użytkownika (Ksywka):</label><br>
+    <input type="text" th:field="*{nickname}" />
+    <span th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}" style="color: red;"></span><br><br>
+
+    <label>Imię:</label><br>
+    <input type="text" th:field="*{firstName}" />
+    <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" style="color: red;"></span><br><br>
+
+    <label>Nazwisko:</label><br>
+    <input type="text" th:field="*{lastName}" />
+    <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color: red;"></span><br><br>
+
+    <label>Data urodzenia:</label><br>
+    <input type="date" th:field="*{birthDate}" />
+    <span th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}" style="color: red;"></span><br><br>
+
+    <label>Email:</label><br>
+    <input type="email" th:field="*{email}" />
+    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red;"></span><br><br>
+
+    <label>Hasło:</label><br>
+    <input type="password" th:field="*{password}" />
+    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red;"></span><br><br>
+
+    <label>Status użytkownika:</label><br>
+    <select th:field="*{statusUser}" id="statusSelect" onchange="toggleStageName()">
+        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
+    </select>
+    <br><br>
+
+    <div id="artistInfoSection" style="display: none;">
+        <p style="margin: 0; color: #211500; font-weight: bold; background-color: #e6f7ff; padding: 10px; border-left: 5px solid #1890ff;">
+            Wybrałeś status ARTIST! Po utworzeniu konta system pozwoli Ci założyć profil wykonawcy, gdzie przypiszemy nazwę grupy (groupName) oraz 9-cyfrowy PIN do tabeli Artists.
         </p>
+        <br>
+    </div>
 
-        <button type="submit">Zarejestruj się</button>
-    </form>
+    <button type="submit">Zarejestruj się</button>
+</form>
 
-    <script>
-        function toggleStageName() {
-            var roleSelect = document.getElementById("roleSelect");
-            var bandname = document.getElementById("bandname");
-            if (roleSelect.value === "ARTIST") {
-                bandname.style.display = "block";
-            } else {
-                bandname.style.display = "none";
-            }
+<script>
+    function toggleStageName() {
+        var statusSelect = document.getElementById("statusSelect");
+        var artistInfoSection = document.getElementById("artistInfoSection");
+        if (statusSelect.value === "ARTIST") {
+            artistInfoSection.style.display = "block";
+        } else {
+            artistInfoSection.style.display = "none";
         }
-        window.onload = toggleStageName;
-    </script>
-
+    }
+    window.onload = toggleStageName;
+</script>
 
 </body>
 </html>
