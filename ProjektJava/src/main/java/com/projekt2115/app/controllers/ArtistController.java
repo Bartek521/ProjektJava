@@ -34,26 +34,21 @@ public class ArtistController {
     public String addArtist(@RequestParam("id_artist") Long idArtist,
                             @RequestParam("groupName") String groupName) {
 
-        // 1. Pobieramy użytkownika z bazy Oracle
         User user = userService.getUserById(idArtist)
                 .orElseThrow(() -> new IllegalArgumentException("Nie znaleziono użytkownika o ID: " + idArtist));
 
-        // 2. Zmiana statusu w tabeli USERS (To już działa)
+
         user.setStatusUser(UserStatus.ARTIST);
         userService.saveUser(user);
 
-        // 3. Tworzenie profilu w tabeli ARTISTS
+
         Artist artist = new Artist();
         artist.setGroupName(groupName);
-        artist.setUser(user); // Hibernate sam wyciągnie stąd ID i zapisze je w kolumnie user_Id
+        artist.setUser(user);
 
-        // 4. GENEROWANIE PINU (Twój model wymaga pola 'pin' o długości dokładnie 9 znaków!)
-        // Generujemy losowy 9-cyfrowy ciąg, np. "123456789"
+
         String randomPin = String.valueOf((int)((Math.random() * 900000000) + 100000000));
         artist.setPin(randomPin);
-
-        // UWAGA: Nie ustawiamy ręcznie artist.setId_artist(...),
-        // ponieważ masz tam adnotację @GeneratedValue i baza Oracle sama nada to ID!
 
         artistRepository.save(artist);
 
