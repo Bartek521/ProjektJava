@@ -1,8 +1,11 @@
 package com.projekt2115.app.services;
 
+import com.projekt2115.app.models.Artist;
 import com.projekt2115.app.models.User;
 import com.projekt2115.app.models.UserStatus;
+import com.projekt2115.app.repositories.ArtistRepository;
 import com.projekt2115.app.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +40,7 @@ public class UserService {
 
         return userRepository.save(user);
     }
-
+    @Transactional
     public void deleteUser(Long id){
         userRepository.deleteById(id);
     }

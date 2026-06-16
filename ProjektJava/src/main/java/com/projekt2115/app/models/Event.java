@@ -5,8 +5,10 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "EVENTS")
@@ -32,7 +34,30 @@ public class Event {
 
     @NotNull(message = "Data koncertu musi być podana")
     @Future(message = "Nie można dodać koncertu z przeszłości")
-    @Temporal(TemporalType.DATE)
-    private Date eventDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime eventDate;
+
+    @NotNull(message = "Data zakończenia koncertu musi być podana")
+    @Future(message = "Data końca eventu musi być z przyszłości")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @Column(name = "end_event")
+    private LocalDateTime endDate;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="artist_id", referencedColumnName = "id_artist",nullable = false)
+    @NotNull(message = "Artysta który tworzy  event musi być przypisany")
+    private Artist artist;
+
+    @NotNull(message = "Ilość wolnych miejsc jest wymagana")
+    @Min(value = 0, message = "Ilość wolnych miejsc nie może być ujemna")
+    @Column(name = "available_seats")
+    private Integer availableSeats;
+
+    @AssertTrue(message = "Data zakończenia koncertu nie może być wcześniejsza niż data rozpoczęcia")
+    public boolean isEndDateValid(){
+        if(eventDate == null || endDate == null) return true;
+        return endDate.isAfter(eventDate);
+    }
+
 
 }

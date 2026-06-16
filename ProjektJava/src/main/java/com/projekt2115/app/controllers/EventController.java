@@ -1,6 +1,7 @@
 package com.projekt2115.app.controllers;
 
 import com.projekt2115.app.models.Event;
+import com.projekt2115.app.repositories.ArtistRepository;
 import com.projekt2115.app.services.EventService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,21 +13,24 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.naming.Binding;
 
 @Controller
 public class EventController {
 
     private final EventService eventService;
+    private final ArtistRepository artistRepository;
 
     @Autowired
-    public EventController(EventService eventService) {
+    public EventController(EventService eventService, ArtistRepository artistRepository)
+    {
         this.eventService = eventService;
+        this.artistRepository = artistRepository;
     }
     @GetMapping("/events")
     public String listEvents(Model model) {
         model.addAttribute("events",eventService.getAllEvents());
         model.addAttribute("newEvent", new Event());
+        model.addAttribute("artists",artistRepository.findAll());
         return "EventList";
     }
     @PostMapping("/events/add")
@@ -37,6 +41,7 @@ public class EventController {
                 System.out.println(error.getDefaultMessage());
             });
             model.addAttribute("events", eventService.getAllEvents());
+            model.addAttribute("artists",artistRepository.findAll());
             return "EventList";
         }
         eventService.saveEvent(event);
@@ -52,14 +57,20 @@ public class EventController {
         Event event = eventService.getEventById(id);
         if (event != null) {
             model.addAttribute("eventToEdit", event);
+            model.addAttribute("artists",artistRepository.findAll());
             return "eventEdit";
         }
         return "redirect:/events";
     }
 
     @PostMapping("/events/update")
-    public String updateEvent(@ModelAttribute("eventToEdit") Event event) {
+    public String updateEvent(@ModelAttribute("eventToEdit") Event event, BindingResult bindingResult,Model model) {
+        if(bindingResult.hasErrors()){
+            model.addAttribute("artists",artistRepository.findAll());
+            return "eventEdit";
+        }
         eventService.saveEvent(event);
         return "redirect:/events";
+
     }
 }

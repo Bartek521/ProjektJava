@@ -6,9 +6,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
-@Table(name="Artists")
+@Table(name="ARTISTS")
 public class Artist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,4 +29,8 @@ public class Artist {
     @Column(unique = true)
     @Size(min=9,max=9, message = "Artysta musi mieć pin")
     private String pin;
+
+
+    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Event> events;
 }

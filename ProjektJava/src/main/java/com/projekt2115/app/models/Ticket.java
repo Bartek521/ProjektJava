@@ -35,4 +35,9 @@ public class Ticket {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @NotNull(message = "Status biletu jest wymagany")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ticket_status")
+    private  TicketStatus ticketStatus = TicketStatus.ACTIVE;
 }

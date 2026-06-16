@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+  <title>Bilety użytkownika</title>
+</head>
+<body>
+<h1> Twoje bilety</h1>
+  <h3 th:text="'Użytkownik: ' +${user.firstName} +' '+ ${user.lastName}+' (' +${user.email}+')'">Dane Użytkownika</h3>
+<table border="1" cellpadding="5">
+  <thead>
+  <tr>
+    <th>ID Biletu</th>
+    <th>Nazwa koncertu</th>
+    <th>Lokalizacja</th>
+    <th>Data rozpoczęcia</th> <th>Typ biletu</th>
+    <th>Cena zapłacona</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="t : ${tickets}">
+    <td th:text="${t.id}">ID</td>
+    <td th:text="${t.event != null ? t.event.name : 'Brak danych'}">Nazwa koncertu</td>
+    <td th:text="${t.event != null ? t.event.location : 'Brak danych'}">Lokalizacja</td>
+
+    <td th:text="${t.event != null && t.event.eventDate != null ? #temporals.format(t.event.eventDate, 'dd-MM-yyyy') : '-'}">
+    <td th:text="${t.ticketType}">BASIC</td>
+    <td th:text="${t.price} + ' PLN'">0.00 PLN</td>
+  </tr>
+
+  <tr th:if="${#lists.isEmpty(tickets)}">
+    <td colspan="6" style="text-align: center; color: gray;">
+      Ten użytkownik nie posiada jeszcze żadnych zakupionych biletów.
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<p>
+  <a th:href="@{/tickets/book}"><button type="button">Kup kolejny bilet </button></a>
+  <a th:href="@{/events}"><button type="button">Lista wszystkich eventów</button></a>
+</p>
+
+</body>
+</html>

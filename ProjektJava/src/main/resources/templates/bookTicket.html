@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Kup bilet</title>
+</head>
+<body>
+<h1>System biletowy</h1>
+<h3>Kup nowy bilet</h3>
+
+<div th:if="${error}" style="color: red; font-weight: bold; margin-bottom: 20px; border: 1px solid red; padding: 10px; width: fit-content;">
+  BŁĄD: <span th:text="${error}">Komunikat błędu</span>
+</div>
+
+<form th:action="@{/tickets/book}" th:object="${ticket}" method="post">
+
+  <p>
+    <label>Wybierz koncert: </label>
+    <select th:field="*{event}" required>
+      <option value="">-- Wybierz koncert --</option>
+      <option th:each="ev : ${events}"
+              th:value="${ev.id}"
+              th:text="${ev.name} + ' - ' + ${ev.location} + ' (Wolne miejsca: ' + ${ev.availableSeats} + ')'"></option>
+    </select>
+  </p>
+
+  <p>
+    <label>Wybierz użytkownika: </label>
+    <select th:field="*{user}" required>
+      <option value="">-- Wybierz użytkownika --</option>
+      <option th:each="u : ${users}"
+              th:value="${u.id}"
+              th:text="${u.firstName} + ' ' + ${u.lastName} + ' (' + ${u.email} + ')'"></option>
+    </select>
+  </p>
+
+  <p>
+    <label>Typ biletu: </label>
+    <select th:field="*{ticketType}" required>
+      <option value="">-- Wybierz typ --</option>
+      <option th:each="type : ${ticketTypes}"
+              th:value="${type}"
+              th:text="${type}"></option>
+    </select>
+  </p>
+
+  <p>
+    <button type="submit">Kup bilet i zapisz w bazie</button>
+    <a th:href="@{/events}"><button type="button">Powrót do koncertów</button></a>
+  </p>
+</form>
+</body>
+</html>

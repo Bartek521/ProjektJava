@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Zarządzanie Artystami</title>
+</head>
+<body>
+<h1>Panel Artystów (Rozszerzenie tabeli Users)</h1>
+<h3>Nadaj profil artysty istniejącemu użytkownikowi</h3>
+
+<form th:action="@{/artists/add}" method="post">
+
+    <p>
+        <label>Wybierz użytkownika z bazy: </label>
+        <select name="id_artist" required>
+            <option value="">-- Wybierz konto użytkownika --</option>
+            <option th:each="u : ${users}"
+                    th:value="${u.id}"
+                    th:text="${u.firstName} + ' ' + ${u.lastName} + ' (' + ${u.email} + ')'"></option>
+        </select>
+    </p>
+
+    <p>
+        <label>Nazwa zespołu / grupy: </label>
+        <input type="text" name="groupName" required />
+    </p>
+
+    <p>
+        <button type="submit">Zapisz profil artysty</button>
+        <a th:href="@{/events}"><button type="button">Przejdź do Eventów</button></a>
+    </p>
+</form>
+
+<h2>Aktywne profile artystów w bazie:</h2>
+<table border="1" cellpadding="5">
+    <thead>
+    <tr>
+        <th>ID Artysty</th>
+        <th>Nazwa zespołu / grupy</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="art : ${artists}">
+        <td th:text="${art.id_artist}">1</td>
+        <td th:text="${art.groupName}">Nazwa Zespołu</td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(artists)}">
+        <td colspan="2" style="text-align: center; color: gray;">
+            Brak przypisanych profilów artystów. Wybierz użytkownika powyżej!
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

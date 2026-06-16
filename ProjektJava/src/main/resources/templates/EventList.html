@@ -1,72 +1,107 @@
 <!DOCTYPE html>
-<html  lang='pl' xmlns:th="http://www.thymeleaf.org">
+<html lang='pl' xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Lista eventów</title>
+  <meta charset="UTF-8">
+  <title>Lista eventów</title>
 </head>
 <body>
-  <h1>Eventy</h1>
-  <h3>Dodaj event</h3>
-  <form th:action="@{/events/add}" th:object="${newEvent}" method="post">
-    <p>
-      <label>Nazwa eventu :</label>
-      <input type="text" th:field="*{name}" required>
-      <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red;"></span>
-    </p>
-    <p>
-      <label>Lokalizacja: </label>
-      <input type="text" th:field="*{location}" required />
-      <span th:if="${#fields.hasErrors('location')}" th:errors="*{location}" style="color: red;"></span>
-    </p>
-    <p>
-      <label>Cena biletu : </label>
-      <input type="number" step="0.01" th:field="*{ticketPrice}" required />
-      <span th:if="${#fields.hasErrors('ticketPrice')}" th:errors="*{ticketPrice}" style="color: red;"></span>
-    </p>
-    <p>
-      <label>Data koncertu: </label>
-      <input type="date" th:field="*{eventDate}" required />
-      <span th:if="${#fields.hasErrors('eventDate')}" th:errors="*{eventDate}" style="color: red;"></span>
-    </p>
-    <p>
-      <button type="submit">Zapisz event w bazie</button>
-    </p>
-  </form>
-  <table border="1" cellpadding="5">
-    <thead>
-    <tr>
-      <th>Nazwa eventu</th>
-      <th>Lokalizacja</th>
-      <th>Cena biletu</th>
-      <th>Data</th>
-      <th>Edytuj</th>
-      <th>Usuń</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="event : ${events}">
-      <td th:text="${event.name}">Nazwa</td>
-      <td th:text="${event.location}">Lokalizacja</td>
-      <td th:text="${event.ticketPrice}">0.00</td>
-      <td th:text="${#dates.format(event.eventDate, 'dd-MM-yyyy')}">01-01-2026</td>
-      <td>
-        <a th:href="@{/events/edit/{id}(id=${event.id})}">
-          <button type="button">Edytuj</button>
-        </a>
-      </td>
-      <td>
-        <a th:href="@{/events/delete/{id}(id=${event.id})}"
-           onclick="return confirm('Czy na pewno chcesz usunąć ten koncert?')">
-          <button type="button">Usuń</button>
-        </a>
-      </td>
-    </tr>
-    <tr th:if="${#lists.isEmpty(events)}">
-      <td colspan="5" style="text-align: center; color: gray;">
-        Brak eventów w bazie danych Oracle.
-      </td>
-    </tr>
-    </tbody> 
-  </table>
+<h1>Eventy</h1>
+<h3>Dodaj event</h3>
+
+<form th:action="@{/events/add}" th:object="${newEvent}" method="post">
+  <p>
+    <label>Nazwa eventu :</label>
+    <input type="text" th:field="*{name}" required>
+    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red;"></span>
+  </p>
+
+  <p>
+  <label>Artysta : </label>
+  <select name="artist" required>
+    <option value="">-- Wybierz artystę z bazy --</option>
+    <option th:each="art : ${artists}"
+            th:value="${art.id_artist}"
+            th:text="${art.user.nickname}"></option>
+  </select>
+</p>
+
+  <p>
+    <label>Lokalizacja: </label>
+    <input type="text" th:field="*{location}" required />
+    <span th:if="${#fields.hasErrors('location')}" th:errors="*{location}" style="color: red;"></span>
+  </p>
+  <p>
+    <label>Cena biletu : </label>
+    <input type="number" step="0.01" th:field="*{ticketPrice}" required />
+    <span th:if="${#fields.hasErrors('ticketPrice')}" th:errors="*{ticketPrice}" style="color: red;"></span>
+  </p>
+  <p>
+    <label>Data rozpoczęcia: </label>
+    <input type="datetime-local" th:field="*{eventDate}" required />
+    <span th:if="${#fields.hasErrors('eventDate')}" th:errors="*{eventDate}" style="color: red;"></span>
+  </p>
+
+  <p>
+    <label>Data zakończenia: </label>
+    <input type="datetime-local" th:field="*{endDate}" required />
+    <span th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}" style="color: red;"></span>
+  </p>
+
+  <p>
+    <label>Liczba wolnych miejsc: </label>
+    <input type="number" th:field="*{availableSeats}" required min="0" />
+    <span th:if="${#fields.hasErrors('availableSeats')}" th:errors="*{availableSeats}" style="color: red;"></span>
+  </p>
+
+  <p>
+    <button type="submit">Zapisz event w bazie</button>
+  </p>
+</form>
+
+<table border="1" cellpadding="5">
+  <thead>
+  <tr>
+    <th>Nazwa eventu</th>
+    <th>Artysta</th> <th>Lokalizacja</th>
+    <th>Cena biletu</th>
+    <th>Data rozpoczęcia</th>
+    <th>Data zakończenia</th> <th>Wolne miejsca</th> <th>Edytuj</th>
+    <th>Usuń</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="event : ${events}">
+    <td th:text="${event.name}">Nazwa</td>
+
+    <td th:text="${event.artist != null && event.artist.user != null ? event.artist.user.nickname : 'Brak artysty'}">
+      Ksywka
+    </td>
+    <td th:text="${event.location}">Lokalizacja</td>
+    <td th:text="${event.ticketPrice}">0.00</td>
+    <td th:text="${#temporals.format(event.eventDate, 'dd-MM-yyyy HH:mm')}"></td>
+
+    <td th:text="${#temporals.format(event.endDate, 'dd-MM-yyyy HH:mm')}"></td>
+    <td th:text="${event.availableSeats}">100</td>
+
+    <td>
+      <a th:href="@{/events/edit/{id}(id=${event.id})}">
+        <button type="button">Edytuj</button>
+      </a>
+    </td>
+    <td>
+      <a th:href="@{/events/delete/{id}(id=${event.id})}"
+         onclick="return confirm('Czy na pewno chcesz usunąć ten koncert?')">
+        <button type="button">Usuń</button>
+      </a>
+    </td>
+  </tr>
+
+  <tr th:if="${#lists.isEmpty(events)}">
+    <td colspan="9" style="text-align: center; color: gray;">
+      Brak eventów w bazie danych Oracle.
+    </td>
+  </tr>
+  </tbody>
+</table>
 </body>
 </html>
