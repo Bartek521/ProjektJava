@@ -7,6 +7,7 @@ import com.projekt2115.app.repositories.ArtistRepository;
 import com.projekt2115.app.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,9 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository){
@@ -33,6 +37,7 @@ public class UserService {
             if (existingUser.isPresent()){
                 throw new IllegalArgumentException("Email jest już zajęty");
             }
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         if (user.getStatusUser() == null) {
             user.setStatusUser(UserStatus.BAMBIK);

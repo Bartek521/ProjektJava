@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Logowanie | Projekt 2115</title>
+    <style>
+        body {
+            background-color: #000; /* Głęboka czerń */
+            color: #fff; /* Biały tekst */
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background-color: #1a1a1a; /* Nieco jaśniejsza czerń dla panelu */
+            padding: 40px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            width: 300px;
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: #000;
+            border: 1px solid #444;
+            color: white;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #ff0000; /* Czerwony akcent */
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover { background-color: #cc0000; }
+        .register-link {
+            margin-top: 20px;
+            display: block;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <h2>LOGIN</h2>
+    <form th:action="@{/login}" method="post">
+        <input type="text" name="username" placeholder="Email" required />
+        <input type="password" name="password" placeholder="Hasło" required />
+        <button type="submit">ZALOGUJ</button>
+    </form>
+    <a href="/register" class="register-link">Nie masz konta? Zarejestruj się</a>
+</div>
+</body>
+</html>
