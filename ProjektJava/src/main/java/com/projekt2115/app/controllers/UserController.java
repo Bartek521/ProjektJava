@@ -39,12 +39,12 @@ public class UserController {
 
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("statuses", UserStatus.values());
             return "register";
         }
         try {
+            user.setStatusUser(UserStatus.BAMBIK);
             userService.saveUser(user);
-            return "redirect:/users/success";
+            return "redirect:/";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("statuses", UserStatus.values());

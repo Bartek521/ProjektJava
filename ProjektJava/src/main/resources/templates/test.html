@@ -1,17 +1,311 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Test Stron</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROJEKT 2115 - Panel Dowodzenia</title>
+    <style>
+        :root {
+            --bg-black: #0b0b0b;
+            --card-gray: #161616;
+            --accent-gold: #d4af37;
+            --text-white: #ffffff;
+            --text-muted: #aaaaaa;
+            --grid-gap: 20px;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 20px 10px 20px;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            letter-spacing: 4px;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        header h1 span {
+            color: var(--accent-gold);
+            border-bottom: 3px solid var(--accent-gold);
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        main {
+            flex: 1;
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+        }
+
+        nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--grid-gap);
+            width: 100%;
+        }
+
+        nav a {
+            background-color: var(--card-gray);
+            color: var(--text-white);
+            text-decoration: none;
+            padding: 30px 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid #222;
+            transition: all 0.25s ease;
+        }
+
+        nav a:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-gold);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.15);
+        }
+
+        nav a span {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+            text-transform: none;
+            font-weight: 400;
+            letter-spacing: 0;
+        }
+
+        section.events-section h2 {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-left: 4px solid var(--accent-gold);
+            padding-left: 15px;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+        }
+
+        section.events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        article.ticket-card {
+            background-color: var(--card-gray);
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        article.ticket-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-gold);
+        }
+
+        article.ticket-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background-color: var(--accent-gold);
+        }
+
+        article.ticket-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            color: var(--text-white);
+        }
+
+        article.ticket-card p {
+            margin: 6px 0;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        article.ticket-card p strong {
+            color: var(--text-white);
+        }
+
+        article.ticket-card footer.ticket-meta {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px dashed #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+        }
+
+        .seats {
+            font-size: 0.85rem;
+            background-color: #222;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        article.ticket-card a.buy-btn {
+            display: block;
+            text-align: center;
+            background-color: var(--accent-gold);
+            color: #000;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 15px;
+        }
+
+        article.ticket-card a.buy-btn.sold-out {
+            background-color: #333;
+            color: #777;
+            pointer-events: none;
+        }
+
+        p.no-events {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            grid-column: 1 / -1;
+            padding: 40px;
+        }
+
+        footer.main-footer {
+            text-align: center;
+            padding: 25px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid #111;
+            margin-top: auto;
+        }
+    </style>
 </head>
 <body>
 
-<h1>Menu Testowe</h1>
+<header>
+    <h1>PROJEKT <span>2115</span></h1>
+    <p>Główny panel zarządzania aplikacją</p>
+</header>
 
-<a href="/users/register">Formularz rejestracji</a><br><br>
-<a href="/users">Lista użytkowników</a><br><br>
-<a href="/events"> Lista wydarzeń</a>
+<main>
+    <nav>
+        <a href="/events">
+            Lista Wydarzeń
+            <span>Przeglądaj, dodawaj i edytuj koncerty</span>
+        </a>
 
+        <a href="/tickets/myTickets">
+            Moje Bilety
+            <span>Podgląd zakupionych biletów użytkownika</span>
+        </a>
+
+        <a href="/polls">
+            Ankiety i Głosowania
+            <span>Zarządzaj ankietami dla fanów</span>
+        </a>
+
+        <a href="/artists">
+            Panel Artystów
+            <span>Zarządzaj składem i dodawaj artystów</span>
+        </a>
+
+        <a href="/users">
+            Lista Użytkowników
+            <span>Baza zarejestrowanych członków gangu</span>
+        </a>
+
+        <a href="/users/register">
+            Rejestracja i Logowanie
+            <span>Załóż nowe konto lub zaloguj się</span>
+        </a>
+        <form th:action="@{/logout}" method="post" style="display: contents;">
+            <button type="submit" style="background-color: #161616; color: #ff4d4d; border: 1px solid #222; padding: 30px 20px; border-radius: 8px; font-size: 1.2rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.25s ease; width: 100%; height: 100%; font-family: inherit;">
+                Wyloguj z Gangu
+                <span style="display: block; font-size: 0.85rem; color: #777; margin-top: 8px; text-transform: none; font-weight: 400; letter-spacing: 0;">Bezpieczne opuszczenie sesji</span>
+            </button>
+        </form>
+    </nav>
+
+    <section class="events-section">
+        <h2>Nadchodzące Koncerty</h2>
+
+        <section class="events-grid">
+            <article class="ticket-card" th:each="event : ${events}">
+                <div>
+                    <h3 th:text="${event.name}">Nazwa Eventu</h3>
+                    <p>Artysta: <strong th:text="${event.artist?.user?.nickname != null ? event.artist.user.nickname : 'GANG 2115'}">Artysta</strong></p>
+                    <p>Miejsce: <strong th:text="${event.location}">Lokalizacja</strong></p>
+                    <p>Data: <strong th:text="${event.eventDate != null ? #temporals.format(event.eventDate, 'dd.MM.yyyy @ HH:mm') : 'Brak daty'}">Data</strong></p>
+                </div>
+
+                <div>
+                    <footer class="ticket-meta">
+                        <span class="price" th:text="${event.ticketPrice} + ' PLN'">0.00 PLN</span>
+                        <span class="seats" th:text="'Miejsca: ' + ${event.availableSeats}">Miejsca: 0</span>
+                    </footer>
+
+                    <a th:if="${event.availableSeats > 0}"
+                       th:href="@{/tickets/book(eventId=${event.id})}"
+                       class="buy-btn">
+                        Kup Bilet
+                    </a>
+
+                    <a th:if="${event.availableSeats <= 0}"
+                       href="#"
+                       class="buy-btn sold-out">
+                        Wyprzedane
+                    </a>
+                </div>
+            </article>
+
+            <p class="no-events" th:if="${#lists.isEmpty(events)}">
+                Aktualnie nie ma zaplanowanych koncertów pod spodem.
+            </p>
+        </section>
+    </section>
+</main>
+
+<footer class="main-footer">
+    &copy; 2026 PROJEKT 2115. Panel i Lista zintegrowane.
+</footer>
 
 </body>
 </html>

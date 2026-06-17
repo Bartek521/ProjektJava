@@ -22,8 +22,12 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers("/", "/users/register","/users/success","/login","/css/**", "/js/**").permitAll()
-                        .requestMatchers("/events").hasAnyRole("ADMIN", "ARTIST")
+                        .requestMatchers("/", "/users/register","/login","/css/**", "/js/**").permitAll()
+
+                        .requestMatchers("/tickets/myTickets").hasAnyRole("BAMBIK","ADMIN", "ARTIST")
+                        .requestMatchers("/events","/users","/polls/add").hasAnyRole("ADMIN", "ARTIST")
+
+                        .requestMatchers("/artists").hasAnyRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

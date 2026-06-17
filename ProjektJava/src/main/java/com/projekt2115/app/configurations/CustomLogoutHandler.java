@@ -65,6 +65,6 @@ public class CustomLogoutHandler implements LogoutSuccessHandler {
             }
         }
         pollSessionService.clear();
-        response.sendRedirect("/login?logout");
+        response.sendRedirect("/");
     }
 }

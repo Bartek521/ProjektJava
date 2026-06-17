@@ -2,52 +2,256 @@
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Kup bilet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PROJEKT 2115 - Kup Bilet</title>
+  <style>
+    :root {
+      --bg-black: #0b0b0b;
+      --card-gray: #161616;
+      --accent-gold: #d4af37;
+      --text-white: #ffffff;
+      --text-muted: #aaaaaa;
+      --error-red: #ff4d4d;
+      --border-color: #222;
+    }
+
+    body {
+      background-color: var(--bg-black);
+      color: var(--text-white);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      letter-spacing: 3px;
+      margin: 0;
+      text-transform: uppercase;
+    }
+
+    header h1 span {
+      color: var(--accent-gold);
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 5px;
+    }
+
+    main {
+      width: 100%;
+      max-width: 550px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Sekcja błędu zamiast kontenera div */
+    aside.error-box {
+      color: var(--error-red);
+      background-color: rgba(255, 77, 77, 0.1);
+      border: 1px solid var(--error-red);
+      padding: 15px;
+      border-radius: 6px;
+      font-weight: bold;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    /* Karta formularza */
+    section.form-card {
+      background-color: var(--card-gray);
+      border: 1px solid var(--border-color);
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    }
+
+    section h3 {
+      margin-top: 0;
+      margin-bottom: 30px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent-gold);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 12px;
+      font-size: 1.2rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    form p {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    form p.actions-box {
+      flex-direction: row;
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: var(--text-white);
+      letter-spacing: 0.5px;
+    }
+
+    select {
+      padding: 12px;
+      background-color: #222;
+      border: 1px solid #333;
+      border-radius: 6px;
+      color: var(--text-white);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.3s;
+      cursor: pointer;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    select:focus {
+      border-color: var(--accent-gold);
+    }
+
+    button {
+      flex: 1;
+      padding: 14px 24px;
+      background-color: var(--accent-gold);
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    button:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    /* Przycisk powrotu */
+    button.btn-secondary {
+      background-color: transparent;
+      color: var(--text-muted);
+      border: 1px solid #333;
+    }
+
+    button.btn-secondary:hover {
+      background-color: #222;
+      color: var(--text-white);
+      border-color: var(--text-white);
+    }
+
+    /* Likwidacja domyślnego wyglądu linku */
+    form p.actions-box a {
+      flex: 1;
+      text-decoration: none;
+      display: flex;
+    }
+
+    footer {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      border-bottom: 1px dashed var(--text-muted);
+      padding-bottom: 2px;
+    }
+
+    footer a:hover {
+      color: var(--accent-gold);
+      border-color: var(--accent-gold);
+    }
+  </style>
 </head>
 <body>
-<h1>System biletowy</h1>
-<h3>Kup nowy bilet</h3>
 
-<div th:if="${error}" style="color: red; font-weight: bold; margin-bottom: 20px; border: 1px solid red; padding: 10px; width: fit-content;">
-  BŁĄD: <span th:text="${error}">Komunikat błędu</span>
-</div>
+<header>
+  <h1>System <span>Biletowy</span></h1>
+  <p>Rezerwacja i generowanie wejściówek koncertowych</p>
+</header>
 
-<form th:action="@{/tickets/book}" th:object="${ticket}" method="post">
+<main>
+  <aside class="error-box" th:if="${error}">
+    BŁĄD: <span th:text="${error}">Komunikat błędu</span>
+  </aside>
 
-  <p>
-    <label>Wybierz koncert: </label>
-    <select th:field="*{event}" required>
-      <option value="">-- Wybierz koncert --</option>
-      <option th:each="ev : ${events}"
-              th:value="${ev.id}"
-              th:text="${ev.name} + ' - ' + ${ev.location} + ' (Wolne miejsca: ' + ${ev.availableSeats} + ')'"></option>
-    </select>
-  </p>
+  <section class="form-card">
+    <h3>Kup nowy bilet</h3>
 
-  <p>
-    <label>Wybierz użytkownika: </label>
-    <select th:field="*{user}" required>
-      <option value="">-- Wybierz użytkownika --</option>
-      <option th:each="u : ${users}"
-              th:value="${u.id}"
-              th:text="${u.firstName} + ' ' + ${u.lastName} + ' (' + ${u.email} + ')'"></option>
-    </select>
-  </p>
+    <form th:action="@{/tickets/book}" th:object="${ticket}" method="post">
+      <p>
+        <label>Wybierz koncert:</label>
+        <select th:field="*{event}" required>
+          <option value="">-- Wybierz koncert --</option>
+          <option th:each="ev : ${events}"
+                  th:value="${ev.id}"
+                  th:text="${ev.name} + ' - ' + ${ev.location} + ' (Wolne miejsca: ' + ${ev.availableSeats} + ')'"></option>
+        </select>
+      </p>
 
-  <p>
-    <label>Typ biletu: </label>
-    <select th:field="*{ticketType}" required>
-      <option value="">-- Wybierz typ --</option>
-      <option th:each="type : ${ticketTypes}"
-              th:value="${type}"
-              th:text="${type}"></option>
-    </select>
-  </p>
+      <p>
+        <label>Wybierz użytkownika:</label>
+        <select th:field="*{user}" required>
+          <option value="">-- Wybierz użytkownika --</option>
+          <option th:each="u : ${users}"
+                  th:value="${u.id}"
+                  th:text="${u.firstName} + ' ' + ${u.lastName} + ' (' + ${u.email} + ')'"></option>
+        </select>
+      </p>
 
-  <p>
-    <button type="submit">Kup bilet i zapisz w bazie</button>
-    <a th:href="@{/events}"><button type="button">Powrót do koncertów</button></a>
-  </p>
-</form>
+      <p>
+        <label>Typ biletu:</label>
+        <select th:field="*{ticketType}" required>
+          <option value="">-- Wybierz typ --</option>
+          <option th:each="type : ${ticketTypes}"
+                  th:value="${type}"
+                  th:text="${type}"></option>
+        </select>
+      </p>
+
+      <p class="actions-box">
+        <button type="submit">Kup bilet</button>
+        <a th:href="@{/events}">
+          <button type="button" class="btn-secondary">Powrót</button>
+        </a>
+      </p>
+    </form>
+  </section>
+</main>
+
+<footer>
+  <a href="/">← Wróć do Panelu Dowodzenia</a>
+</footer>
+
 </body>
 </html>
