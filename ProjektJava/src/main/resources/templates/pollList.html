@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ankiety i głosowania</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: sans-serif;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1, h2 {
+            color: #ff0000;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+        .error-msg {
+            background-color: #330000;
+            border: 1px solid #ff0000;
+            color: #ffcccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .poll-card {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .poll-question {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .option-group {
+            margin: 10px 0;
+        }
+        .option-label {
+            display: block;
+            padding: 10px;
+            background: #111;
+            border: 1px solid #444;
+            margin-bottom: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .option-label:hover {
+            border-color: #ff0000;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        .btn-vote {
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+        .btn-vote:hover {
+            background-color: #cc0000;
+        }
+        .status-badge {
+            display: inline-block;
+            background-color: #222;
+            color: #aaa;
+            padding: 5px 10px;
+            font-size: 0.9em;
+            border-radius: 4px;
+            border: 1px dashed #555;
+            margin-top: 10px;
+        }
+        .nav-links {
+            margin-bottom: 25px;
+        }
+        .nav-links a {
+            color: #ff0000;
+            text-decoration: none;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<main class="container">
+    <h1>Panel Głosowań 2115</h1>
+
+    <nav class="nav-links">
+        <a th:href="@{/}">← Powrót do menu</a>
+        <a th:href="@{/polls/add}">+ Dodaj nową ankietę</a>
+    </nav>
+
+    <section th:if="${error}" class="error-msg" role="alert">
+        <p th:text="${error}"></p>
+    </section>
+
+    <p th:if="${#lists.isEmpty(polls)}">Obecnie nie ma żadnych aktywnych ankiet.</p>
+
+    <article th:each="poll : ${polls}" class="poll-card">
+        <h2 class="poll-question" th:text="${poll.question}">Pytanie</h2>
+        <form th:action="@{/polls/vote}" method="post">
+            <input type="hidden" name="pollId" th:value="${poll.id}" />
+            <ul style="list-style: none; padding: 0;">
+                <li th:each="option, iterStat : ${poll.options}" class="option-group">
+                    <label class="option-label" th:for="'poll-' + ${poll.id} + '-opt-' + ${iterStat.index}">
+                        <input type="radio"
+                               th:id="'poll-' + ${poll.id} + '-opt-' + ${iterStat.index}"
+                               name="option"
+                               th:value="${option}"
+                               required />
+                        <span th:text="${option}">Opcja</span>
+                    </label>
+                </li>
+            </ul>
+
+            <p th:if="${#lists.contains(votedInSession, poll.id)}" class="status-badge">
+                Wybrałeś opcję w tej sesji. Głos zostanie zapisany po kliknięciu "Wyloguj".
+            </p>
+
+            <fieldset th:unless="${#lists.contains(votedInSession, poll.id)}" style="border: none; padding: 0;">
+                <button type="submit" class="btn-vote">Oddaj głos</button>
+            </fieldset>
+        </form>
+    </article>
+</main>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Nowa Ankieta </title>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .form-container {
+      background-color: #1a1a1a;
+      padding: 40px;
+      border-radius: 10px;
+      border: 1px solid #333;
+      width: 400px;
+    }
+    h2 {
+      color: #ff0000;
+      text-align: center;
+      margin-top: 0;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #ccc;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      background: #000;
+      border: 1px solid #444;
+      color: white;
+      box-sizing: border-box;
+      border-radius: 4px;
+    }
+    input:focus, textarea:focus {
+      border-color: #ff0000;
+      outline: none;
+    }
+    .help-text {
+      font-size: 0.85em;
+      color: #888;
+      margin-top: 5px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #ff0000;
+      border: none;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 1em;
+    }
+    button:hover {
+      background-color: #cc0000;
+    }
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 15px;
+      color: #888;
+      text-decoration: none;
+    }
+    .back-link:hover {
+      color: #ff0000;
+    }
+  </style>
+</head>
+<body>
+
+<main class="form-container">
+  <h2>UTWÓRZ NOWĄ ANKIETĘ</h2>
+
+  <form th:action="@{/polls/add}" method="post">
+    <section class="form-group">
+      <label th:for="question">Treść pytania ankietowego:</label>
+      <input type="text" id="question" name="question" required
+             placeholder="np. W jakim mieście zagrać kolejny koncert?" />
+    </section>
+
+    <section class="form-group">
+      <label th:for="rawOptions">Opcje do wyboru (rozdzielone przecinkiem):</label>
+      <textarea id="rawOptions" name="rawOptions" rows="4" required
+                placeholder="np. Warszawa, Kraków, Gdańsk, Białystok"></textarea>
+      <small class="help-text" style="display: block;">Wpisz opcje i oddziel je wyłącznie przecinkami.</small>
+    </section>
+
+    <button type="submit">Opublikuj ankietę</button>
+  </form>
+
+  <nav>
+    <a th:href="@{/polls}" class="back-link">Anuluj i wróć</a>
+  </nav>
+</main>
+
+</body>
+</html>
